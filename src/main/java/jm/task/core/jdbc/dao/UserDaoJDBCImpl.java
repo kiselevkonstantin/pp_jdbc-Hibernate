@@ -17,7 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users1(" +
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS users(" +
                     "id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                     "name VARCHAR(50)," +
                     "last_name VARCHAR(50)," +
@@ -29,7 +29,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("DROP TABLE IF EXISTS users1;");
+            statement.executeUpdate("DROP TABLE IF EXISTS users;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (PreparedStatement ps = connection.
-                prepareStatement("INSERT INTO users1 (name, last_name, age) VALUES (?, ?, ?)")) {
+                prepareStatement("INSERT INTO users (name, last_name, age) VALUES (?, ?, ?)")) {
             ps.setString(1, name); //ВЕРОЯТНАЯ ОШИБКА В НОМЕРЕ КОЛОНКИ
             ps.setString(2, lastName);
             ps.setByte(3, age);
@@ -50,7 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
 
     public void removeUserById(long id) {
-        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM users1 WHERE id = ?")) {
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE id = ?")) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -60,7 +60,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public List<User> getAllUsers() {
         List<User> resultList = new ArrayList<>();
-        String query = "SELECT * FROM users1";
+        String query = "SELECT * FROM users";
 
         try (ResultSet rs = connection.createStatement().executeQuery(query)) {
             while (rs.next()) {
@@ -79,7 +79,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("TRUNCATE users1");
+            statement.executeUpdate("TRUNCATE users");
         } catch (SQLException e) {
             e.printStackTrace();
         }
